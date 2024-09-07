@@ -40,7 +40,6 @@ while 1:
         elif event.type == EVENT_BUTTON_PRESSED:
             
             if event.button == "A":
-                print(f"{event.button}")
                 mouse.press(Button.left)
             elif event.button == "B": 
                 mouse.click(Button.right,1)              
