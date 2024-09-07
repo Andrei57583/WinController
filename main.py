@@ -16,7 +16,6 @@ while 1:
     events = get_events()
     for event in events:
         controller = event.user_index
-        #print(get_battery_information(controller))
         if event.type == EVENT_CONNECTED:
             print(f"Controller {controller} is now connected!")
 
@@ -42,15 +41,13 @@ while 1:
             
             if event.button == "A":
                 print(f"{event.button}")
-                #mouse.click(Button.left,1)
                 mouse.press(Button.left)
-            elif event.button == "B":
-                print(f"{event.button}")  
+            elif event.button == "B": 
                 mouse.click(Button.right,1)              
             elif event.button == "X":
-                print(f"{event.button}")
+                pass
             elif event.button == "Y":
-                print(f"{event.button}")
+                pass
             elif event.button == "DPAD_LEFT":
                 mouse.move(-1 * sensitivity, 0)
             elif event.button == "DPAD_RIGHT":
