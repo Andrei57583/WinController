@@ -11,13 +11,11 @@ keyboard = KeyboardController()
 
 set_deadzone(DEADZONE_TRIGGER,10)
 
-sensitivity = 25
-
 # root window
 root = tk.Tk()
 root.geometry('300x200')
 root.resizable(False, False)
-root.title('Slider Demo')
+root.title('Sensitivity Slider')
 
 
 root.columnconfigure(0, weight=1)
@@ -29,7 +27,7 @@ current_value = tk.DoubleVar()
 
 
 def get_current_value():
-    return '{: .2f}'.format(current_value.get())
+    return '{: .1f}'.format(current_value.get())
 
 
 def slider_changed(event):
@@ -39,7 +37,7 @@ def slider_changed(event):
 # label for the slider
 slider_label = ttk.Label(
     root,
-    text='Slider:'
+    text='Sensitivity Slider:'
 )
 
 slider_label.grid(
@@ -51,8 +49,8 @@ slider_label.grid(
 #  slider
 slider = ttk.Scale(
     root,
-    from_=0,
-    to=100,
+    from_=10,
+    to=50,
     orient='horizontal',  # vertical
     command=slider_changed,
     variable=current_value
@@ -90,6 +88,9 @@ value_label.grid(
 )
 
 while 1:
+
+    sensitivity = float(get_current_value())
+    
     events = get_events()
     for event in events:
         controller = event.user_index
