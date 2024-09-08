@@ -23,7 +23,7 @@ root.columnconfigure(1, weight=3)
 
 
 # slider current value
-current_value = tk.DoubleVar()
+current_value = tk.DoubleVar(value=10)
 
 
 def get_current_value():
@@ -87,6 +87,8 @@ value_label.grid(
     sticky='n'
 )
 
+scroll_speed = 0.25
+
 while 1:
 
     sensitivity = float(get_current_value())
@@ -107,11 +109,14 @@ while 1:
 
             elif event.stick == RIGHT:
                 r_stick_pos = (int(round(event.x, 0)), int(round(event.y,0)))
-                mouse.scroll(r_stick_pos[0],r_stick_pos[1])
+                mouse.scroll(scroll_speed * r_stick_pos[0],scroll_speed * r_stick_pos[1])
 
         elif event.type == EVENT_TRIGGER_MOVED:
             if event.trigger == LEFT:
-                pass                
+                if event.value > 0.0:
+                    keyboard.press(keyboard._Key.shift_l)
+                else:
+                    keyboard.release(keyboard._Key.shift_l)
             elif event.trigger == RIGHT:
                 pass
 
@@ -122,17 +127,17 @@ while 1:
             elif event.button == "B": 
                 mouse.click(Button.right,1)              
             elif event.button == "X":
-                pass
+                keyboard.tap(keyboard._Key.backspace)
             elif event.button == "Y":
                 pass
             elif event.button == "DPAD_LEFT":
-                mouse.move(-1 * sensitivity, 0)
+                keyboard.tap(keyboard._Key.left)
             elif event.button == "DPAD_RIGHT":
-                mouse.move(1 * sensitivity, 0)
+                keyboard.tap(keyboard._Key.right)
             elif event.button == "DPAD_UP":
-                mouse.move(0 ,-1 * sensitivity)
+                keyboard.tap(keyboard._Key.up)
             elif event.button == "DPAD_DOWN":
-                mouse.move(0 ,1 * sensitivity)
+                keyboard.tap(keyboard._Key.down)
 
         elif event.type == EVENT_BUTTON_RELEASED:
             if event.button == "A":
