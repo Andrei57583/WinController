@@ -6,6 +6,8 @@ from tkinter import ttk
 from pynput.mouse import Button, Controller as MouseController
 from pynput.keyboard import Key, Controller as KeyboardController
 
+import pyuac
+
 mouse = MouseController()
 keyboard = KeyboardController()
 
@@ -89,61 +91,69 @@ value_label.grid(
 
 scroll_speed = 0.25
 
-while 1:
+def main():
+    while 1:
 
-    sensitivity = float(get_current_value())
-    
-    events = get_events()
-    for event in events:
-        controller = event.user_index
-        if event.type == EVENT_CONNECTED:
-            print(f"Controller {controller} is now connected!")
+        sensitivity = float(get_current_value())
+        
+        events = get_events()
+        for event in events:
+            controller = event.user_index
+            if event.type == EVENT_CONNECTED:
+                print(f"Controller {controller} is now connected!")
 
-        elif event.type == EVENT_DISCONNECTED:
-            print(f"Controller {controller} is now disconnected!")
+            elif event.type == EVENT_DISCONNECTED:
+                print(f"Controller {controller} is now disconnected!")
 
-        elif event.type == EVENT_STICK_MOVED:
-            if event.stick == LEFT:
-                l_stick_pos = (int(round(sensitivity * event.x, 0)), int(round(sensitivity * event.y, 0)))
-                mouse.move(l_stick_pos[0],-1 * l_stick_pos[1])
+            elif event.type == EVENT_STICK_MOVED:
+                if event.stick == LEFT:
+                    l_stick_pos = (int(round(sensitivity * event.x, 0)), int(round(sensitivity * event.y, 0)))
+                    mouse.move(l_stick_pos[0],-1 * l_stick_pos[1])
 
-            elif event.stick == RIGHT:
-                r_stick_pos = (int(round(event.x, 0)), int(round(event.y,0)))
-                mouse.scroll(scroll_speed * r_stick_pos[0],scroll_speed * r_stick_pos[1])
+                elif event.stick == RIGHT:
+                    r_stick_pos = (int(round(event.x, 0)), int(round(event.y,0)))
+                    mouse.scroll(scroll_speed * r_stick_pos[0],scroll_speed * r_stick_pos[1])
 
-        elif event.type == EVENT_TRIGGER_MOVED:
-            if event.trigger == LEFT:
-                if event.value > 0.0:
-                    keyboard.press(keyboard._Key.shift_l)
-                else:
-                    keyboard.release(keyboard._Key.shift_l)
-            elif event.trigger == RIGHT:
-                pass
+            elif event.type == EVENT_TRIGGER_MOVED:
+                if event.trigger == LEFT:
+                    if event.value > 0.0:
+                        keyboard.press(keyboard._Key.shift_l)
+                    else:
+                        keyboard.release(keyboard._Key.shift_l)
+                elif event.trigger == RIGHT:
+                    pass
 
-        elif event.type == EVENT_BUTTON_PRESSED:
-            
-            if event.button == "A":
-                mouse.press(Button.left)
-            elif event.button == "B": 
-                mouse.click(Button.right,1)              
-            elif event.button == "X":
-                keyboard.tap(keyboard._Key.backspace)
-            elif event.button == "Y":
-                pass
-            elif event.button == "DPAD_LEFT":
-                keyboard.tap(keyboard._Key.left)
-            elif event.button == "DPAD_RIGHT":
-                keyboard.tap(keyboard._Key.right)
-            elif event.button == "DPAD_UP":
-                keyboard.tap(keyboard._Key.up)
-            elif event.button == "DPAD_DOWN":
-                keyboard.tap(keyboard._Key.down)
+            elif event.type == EVENT_BUTTON_PRESSED:
+                
+                if event.button == "A":
+                    mouse.press(Button.left)
+                elif event.button == "B": 
+                    mouse.click(Button.right,1)              
+                elif event.button == "X":
+                    keyboard.tap(keyboard._Key.backspace)
+                elif event.button == "Y":
+                    pass
+                elif event.button == "DPAD_LEFT":
+                    keyboard.tap(keyboard._Key.left)
+                elif event.button == "DPAD_RIGHT":
+                    keyboard.tap(keyboard._Key.right)
+                elif event.button == "DPAD_UP":
+                    keyboard.tap(keyboard._Key.up)
+                elif event.button == "DPAD_DOWN":
+                    keyboard.tap(keyboard._Key.down)
 
-        elif event.type == EVENT_BUTTON_RELEASED:
-            if event.button == "A":
-                mouse.release(Button.left)
+            elif event.type == EVENT_BUTTON_RELEASED:
+                if event.button == "A":
+                    mouse.release(Button.left)
 
-    try:          
-        root.update()
-    except tk.TclError:
-        break
+        try:          
+            root.update()
+        except tk.TclError:
+            break
+
+if __name__ == "__main__":
+    if not pyuac.isUserAdmin():
+        print("Re-launching as admin!")
+        pyuac.runAsAdmin()
+    else:
+        main()
