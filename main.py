@@ -132,7 +132,7 @@ def main():
                 elif event.button == "X":
                     keyboard.tap(keyboard._Key.backspace)
                 elif event.button == "Y":
-                    pass
+                    keyboard.tap(keyboard._Key.enter)
                 elif event.button == "DPAD_LEFT":
                     keyboard.tap(keyboard._Key.left)
                 elif event.button == "DPAD_RIGHT":
